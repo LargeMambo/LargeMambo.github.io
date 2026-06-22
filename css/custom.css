@@ -1,0 +1,1384 @@
+/* ============================================
+   ZYYO666/homepage 视觉风格 - Butterfly 适配版
+   参考: https://github.com/ZYYO666/homepage
+   核心设计：毛玻璃卡片 · 多主题预设 · 渐变文字
+   ============================================ */
+
+/* 主题1 默认：明亮风格 — 深色背景图，文字改为白色系 */
+html {
+  --name: 明亮;
+  --main_bg: #1a1a2e;
+  --card_bg: rgba(235, 238, 255, 0.68);
+  --card_sidebar_bg: rgba(255, 255, 255, 0.60);
+  --card_hover: rgba(240, 242, 255, 0.82);
+  --card_filter: 18px;
+  --card_border: 1px solid rgba(255, 255, 255, 0.55);
+  --text_primary: #ffffff;         /* 主文字：纯白，在渐变半透明卡片上清晰 */
+  --text_secondary: #e8e8f8;       /* 次要文字：近白 */
+  --text_muted: #c0c0d8;           /* 辅助文字：淡紫白 */
+  --gradient: linear-gradient(120deg, #bd34fe, #e0321b 30%, #41d1ff 60%);
+  --purple_text: #c0b8ff;          /* 链接/强调色：浅紫，在深背景上可见 */
+  --tag_bg: rgba(180, 195, 230, 0.35);
+  --footer_text: #d0d0e8;
+  --svg_fill: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.35);
+}
+
+/* 主题2 深色 — 文字保持近白 */
+html[data-theme='dark'] {
+  --name: 深色;
+  --main_bg: #0d0d1a;
+  --card_bg: rgba(18, 18, 36, 0.72);
+  --card_sidebar_dark: rgba(12, 12, 26, 0.60);
+  --card_hover: rgba(28, 28, 52, 0.88);
+  --card_filter: 18px;
+  --card_border: 1px solid rgba(255, 255, 255, 0.10);
+  --text_primary: #eeeef8;
+  --text_secondary: #c0c0d8;
+  --text_muted: #8888aa;
+  --gradient: linear-gradient(120deg, #bd34fe, #f76cc6 30%, #fff 60%);
+  --purple_text: #a89fff;
+  --tag_bg: rgba(255, 255, 255, 0.08);
+  --footer_text: #9090b8;
+  --svg_fill: #eeeef8;
+  --shadow: rgba(0, 0, 0, 0.55);
+}
+
+/* 全局背景 — 显示背景图，固定不随内容滚动 */
+body {
+  background-color: var(--main_bg) !important;
+  background-image: url(/img/bg.webp) !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
+}
+
+/* ---------- 通用工具类 ---------- */
+.gradient-text {
+  background-image: var(--gradient);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradShift 6s ease-in-out infinite;
+}
+@keyframes gradShift {
+  0%   { background-position: 100%; }
+  25%  { background-position: 50%; }
+  50%  { background-position: 0%; }
+  75%  { background-position: 50%; }
+  100% { background-position: 100%; }
+}
+
+/* ---------- 卡片毛玻璃效果 ---------- */
+
+/* 首页文章卡片 — 渐变通透玻璃感 */
+#recent-posts .recent-post-item {
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.10) 0%,
+    rgba(255,255,255,0.04) 60%,
+    rgba(255,255,255,0.07) 100%) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 16px var(--shadow) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+[data-theme=dark] #recent-posts .recent-post-item {
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.06) 0%,
+    rgba(255,255,255,0.02) 60%,
+    rgba(255,255,255,0.04) 100%) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+}
+
+/* 文章详情页/普通页面 */
+#post,
+#page {
+  background: linear-gradient(-45deg, rgba(255,225,245,0.04), rgba(220,225,255,0.05), rgba(225,255,251,0.04), rgba(240,225,255,0.04)) !important;
+  background-size: 400% 400% !important;
+  animation: gradientBG 10s ease infinite;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 16px var(--shadow) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+[data-theme=dark] #post,
+[data-theme=dark] #page {
+  background: linear-gradient(-45deg, rgba(24,40,72,0.04), rgba(35,37,58,0.05), rgba(35,37,58,0.05), rgba(24,40,72,0.04)) !important;
+  background-size: 400% 400% !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+}
+
+/* 侧边栏卡片 */
+.layout .aside-wrap .card-widget {
+  background: linear-gradient(160deg,
+    rgba(255,255,255,0.12) 0%,
+    rgba(255,255,255,0.05) 50%,
+    rgba(255,255,255,0.09) 100%) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 12px var(--shadow) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+html[data-theme='dark'] .layout .aside-wrap .card-widget {
+  background: linear-gradient(160deg,
+    rgba(255,255,255,0.08) 0%,
+    rgba(255,255,255,0.03) 50%,
+    rgba(255,255,255,0.06) 100%) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+}
+
+/* 归档/标签/分类页主容器 */
+#category,
+#tag,
+#archive {
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.08) 0%,
+    rgba(255,255,255,0.03) 100%) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  border-radius: 14px;
+  padding: 20px;
+}
+[data-theme=dark] #category,
+[data-theme=dark] #tag,
+[data-theme=dark] #archive {
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.05) 0%,
+    rgba(255,255,255,0.02) 100%) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+}
+#recent-posts .recent-post-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px var(--shadow) !important;
+}
+/* 强制隐藏不必要的统计栏目 */
+#busuanzi_value_site_uv,
+#busuanzi_value_site_pv,
+.webinfo-item:has(#busuanzi_value_site_uv),
+.webinfo-item:has(#busuanzi_value_site_pv),
+.webinfo-item:has(.fa-user) {
+  display: none !important;
+}
+
+/* ---------- 首页文章封面圆角 ---------- */
+#recent-posts .recent-post-item .post_cover img {
+  border-radius: 10px !important;
+}
+
+/* ---------- 导航栏 ---------- */
+#nav {
+  background: transparent !important;
+}
+
+/* ---------- 渐变标题 ---------- */
+/* 首页大标题保留渐变，但去掉文字填充透明（否则看不见） */
+#site-title {
+  background-image: var(--gradient);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradShift 6s ease-in-out infinite;
+}
+/* 首页副标题 */
+#site-subtitle {
+  background-image: var(--gradient);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradShift 6s ease-in-out infinite;
+  opacity: 0.85;
+}
+
+/* ---------- 首页文章卡片文字白色 ---------- */
+/* 文章标题（h2 容器 + 内部链接） */
+.post-title,
+.article-title,
+.post-title a,
+.article-title a,
+#recent-posts .recent-post-item .article-title,
+#recent-posts .recent-post-item .article-title a {
+  color: rgba(255, 255, 255, 0.95) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.95) !important;
+  transition: color 0.2s;
+}
+.post-title a:hover,
+.article-title a:hover {
+  background-image: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 首页卡片摘要/正文预览文字 */
+#recent-posts .recent-post-item .content,
+#recent-posts .recent-post-item .content p,
+.recent-post-info .content,
+.recent-post-info .content p {
+  color: rgba(255, 255, 255, 0.82) !important;
+}
+
+/* 首页卡片元信息（发表于/更新于/分类） */
+#recent-posts .recent-post-item .article-meta-wrap,
+#recent-posts .recent-post-item .article-meta-wrap span,
+#recent-posts .recent-post-item .article-meta-wrap a,
+#recent-posts .recent-post-item .article-meta-wrap i,
+.article-meta-wrap,
+.article-meta-wrap span,
+.article-meta-wrap a {
+  color: rgba(255, 255, 255, 0.70) !important;
+}
+
+/* ---------- 页脚 ---------- */
+#footer {
+  background: transparent !important;
+}
+#footer,
+#footer a {
+  color: var(--footer_text) !important;
+}
+
+/* ---------- 返回顶部按钮 ---------- */
+#go-up {
+  background: var(--card_bg) !important;
+  backdrop-filter: blur(8px);
+  border: var(--card_border) !important;
+}
+/* 修复图标颜色被覆盖问题 */
+#go-up i,
+#go-up .fas,
+#go-up .fa-arrow-up {
+  color: var(--text_primary) !important;
+  font-size: 20px !important;
+  opacity: 0.8;
+}
+
+/* ---------- About / Projects 页面卡片风格 ---------- */
+.page-container {
+  max-width: 860px;
+  margin: 0 auto;
+}
+.page-card {
+  background: var(--card_bg);
+  backdrop-filter: blur(var(--card_filter));
+  -webkit-backdrop-filter: blur(var(--card_filter));
+  border: var(--card_border);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 12px var(--shadow);
+}
+
+/* ---------- 项目卡片 ---------- */
+.project-card {
+  display: flex;
+  align-items: center;
+  background: var(--card_bg);
+  backdrop-filter: blur(var(--card_filter));
+  -webkit-backdrop-filter: blur(var(--card_filter));
+  border: var(--card_border);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 14px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+.project-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px var(--shadow);
+}
+.project-card:active {
+  transform: scale(0.98);
+}
+.project-card .card-icon {
+  font-size: 32px;
+  width: 52px; height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 18px;
+  background: var(--tag_bg);
+  border-radius: 12px;
+}
+.project-card .card-body { flex: 1; }
+.project-card .card-body h3 {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text_primary);
+}
+.project-card .card-body p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text_secondary);
+}
+
+/* ============================================
+   关于页 / 项目页文字颜色
+   ============================================ */
+
+/* 关于页正文、副标题、时间轴全部白色 */
+.about-container,
+.about-container p,
+.about-container .about-sub,
+.about-container .timeline-custom .time,
+.about-container .timeline-custom .event,
+.about-intro h1,
+.about-intro p {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* 项目页 intro 文字白色（坐落在深色背景上） */
+.projects-page .projects-intro p {
+  color: rgba(255, 255, 255, 0.85) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.85) !important;
+}
+/* 项目卡片文字全部亮白色 */
+.projects-page .project-card .card-body h3,
+.projects-page .project-card .card-body p {
+  color: rgba(255,255,255,0.95) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.95) !important;
+}
+
+/* ---------- 归档/标签/分类页内所有文字白色 ---------- */
+#category, #category h1, #category h2, #category h3,
+#category a, #category span, #category li,
+#tag, #tag h1, #tag h2, #tag h3,
+#tag a, #tag span, #tag li,
+#archive, #archive h1, #archive h2, #archive h3,
+#archive a, #archive span, #archive li,
+.category-list-item a, .tag-list a, .tag-list-link,
+.archive-header, .archive-header h2 {
+  color: rgba(255, 255, 255, 0.90) !important;
+}
+.category-list-item a:hover,
+.tag-list a:hover,
+.tag-list-link:hover {
+  color: var(--purple_text) !important;
+}
+
+/* ---------- 分页 ---------- */
+#pagination .page-number.current {
+  background: var(--purple_text) !important;
+}
+
+/* ---------- 选中文字颜色 ---------- */
+::selection {
+  background: var(--purple_text);
+  color: #fff;
+}
+
+/* ---------- 页脚导航 ---------- */
+#footer-wrap {
+  padding: 20px 0;
+}
+
+/* ============================================
+   侧边栏卡片渐变色（CSDN 文章第14节风格）
+   ============================================ */
+
+/* 作者信息卡片 */
+#aside-content .card-widget.card-info {
+  background: linear-gradient(-45deg, rgba(255, 225, 245, 0.08), rgba(255, 225, 225, 0.10), rgba(225, 255, 251, 0.10), rgba(255, 225, 255, 0.08)) !important;
+  background-size: 400% 400% !important;
+  animation: gradientBG 8s ease infinite;
+}
+[data-theme=dark] #aside-content .card-widget.card-info {
+  background: linear-gradient(-45deg, rgba(24, 40, 72, 0.08), rgba(35, 37, 58, 0.12), rgba(35, 37, 58, 0.12), rgba(24, 40, 72, 0.08)) !important;
+  background-size: 400% 400% !important;
+  animation: gradientBG 8s ease infinite;
+}
+
+/* 公告栏卡片 */
+#aside-content .card-widget.card-announcement {
+  background: linear-gradient(-45deg, rgba(255, 225, 245, 0.07), rgba(255, 225, 225, 0.09), rgba(225, 255, 251, 0.09), rgba(255, 225, 255, 0.07)) !important;
+  background-size: 400% 400% !important;
+  animation: gradientBG 10s ease infinite;
+}
+[data-theme=dark] #aside-content .card-widget.card-announcement {
+  background: linear-gradient(-45deg, rgba(24, 40, 72, 0.07), rgba(35, 37, 58, 0.10), rgba(35, 37, 58, 0.10), rgba(24, 40, 72, 0.07)) !important;
+  background-size: 400% 400% !important;
+}
+
+/* 其他侧栏卡片 */
+#aside-content .sticky_layout .card-widget {
+  background: linear-gradient(-45deg, rgba(255, 225, 245, 0.07), rgba(255, 225, 225, 0.09), rgba(225, 255, 251, 0.09), rgba(255, 225, 255, 0.07)) !important;
+  background-size: 400% 400% !important;
+}
+[data-theme=dark] #aside-content .sticky_layout .card-widget {
+  background: linear-gradient(-45deg, rgba(24, 40, 72, 0.07), rgba(35, 37, 58, 0.10), rgba(35, 37, 58, 0.10), rgba(24, 40, 72, 0.07)) !important;
+  background-size: 400% 400% !important;
+}
+
+/* 关注按钮 */
+#aside-content .card-widget.card-info #card-info-btn {
+  background-color: #3eb8be !important;
+  border-radius: 8px !important;
+}
+
+/* 动画背景移动 */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ============================================
+   页脚渐变色 + 鱼塘容器
+   ============================================ */
+#footer {
+  background: linear-gradient(135deg, rgba(23, 23, 116, 0.15), rgba(28, 181, 224, 0.15)) !important;
+  height: 160px;
+}
+[data-theme=dark] #footer {
+  background: linear-gradient(135deg, rgba(23, 23, 116, 0.3), rgba(28, 181, 224, 0.2)) !important;
+}
+#footer #footer-wrap {
+  z-index: 1;
+  position: relative;
+}
+
+/* ============================================
+   运行时间字体（数字 LED 风格）
+   来源：https://www.luotian.cyou/post/custom-beautify.html#13-%E9%A1%B5%E8%84%9A%E4%BF%A1%E6%81%AF%E6%8F%92%E5%85%A5
+   用法：下载 UnidreamLED.ttf 放到 source/font/ 目录下
+   ============================================ */
+/* @font-face {
+  font-family: 'LED';
+  src: url('/font/UnidreamLED.ttf') format('truetype');
+  font-display: swap;
+} */
+#runtime {
+  display: block;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  letter-spacing: normal;
+}
+
+/* ============================================
+   洛天文章美化 - 代码块配色（亮色主题）
+   ============================================ */
+html:not([data-theme="dark"]) {
+  --hl-bg: #f4f7fa !important;
+  --hltools-bg: #e9eef4 !important;
+  --hlnumber-bg: #f4f7fa !important;
+  --hlnumber-color: #8da4bb !important;
+  --hlscrollbar-bg: #dbe6f0 !important;
+  --hlexpand-bg: linear-gradient(180deg, rgba(244,247,250,0), rgba(244,247,250,0.9)) !important;
+}
+html:not([data-theme="dark"]) #article-container .highlight table {
+  background-color: #f4f7fa !important;
+}
+/* 关键字 */
+html:not([data-theme="dark"]) .highlight .code .keyword,
+html:not([data-theme="dark"]) .highlight .code .built_in,
+html:not([data-theme="dark"]) .highlight .code .type {
+  color: #005cc5 !important;
+}
+/* 字符串 */
+html:not([data-theme="dark"]) .highlight .code .string {
+  color: #22863a !important;
+}
+/* 注释 */
+html:not([data-theme="dark"]) .highlight .code .comment {
+  color: #677886 !important;
+  font-style: italic !important;
+}
+/* 数字 */
+html:not([data-theme="dark"]) .highlight .code .number {
+  color: #d130a5 !important;
+}
+/* 函数名 */
+html:not([data-theme="dark"]) .highlight .code .title,
+html:not([data-theme="dark"]) .highlight .code .function {
+  color: #0077aa !important;
+}
+/* 预处理 */
+html:not([data-theme="dark"]) .highlight .code .meta,
+html:not([data-theme="dark"]) .highlight .code .meta-keyword {
+  color: #8b3c9b !important;
+}
+/* 变量 */
+html:not([data-theme="dark"]) .highlight .code .attr,
+html:not([data-theme="dark"]) .highlight .code .variable,
+html:not([data-theme="dark"]) .highlight .code .params {
+  color: #212f3b !important;
+}
+
+/* ============================================
+   洛天文章美化 - 代码块配色（暗色主题）
+   ============================================ */
+html[data-theme="dark"] {
+  --hl-bg: #0b0f19 !important;
+  --hltools-bg: #111726 !important;
+  --hlnumber-bg: #0b0f19 !important;
+  --hlnumber-color: #5c6c7f !important;
+  --hlscrollbar-bg: #1e293b !important;
+  --hlexpand-bg: linear-gradient(180deg, rgba(11,15,25,0), rgba(11,15,25,0.9)) !important;
+}
+html[data-theme="dark"] #article-container .highlight table {
+  background-color: #0b0f19 !important;
+}
+html[data-theme="dark"] .highlight .code .keyword,
+html[data-theme="dark"] .highlight .code .built_in,
+html[data-theme="dark"] .highlight .code .type {
+  color: #569cd6 !important;
+}
+html[data-theme="dark"] .highlight .code .string {
+  color: #8fca5c !important;
+}
+html[data-theme="dark"] .highlight .code .comment {
+  color: #5c7080 !important;
+  font-style: italic !important;
+}
+html[data-theme="dark"] .highlight .code .number {
+  color: #f07178 !important;
+}
+html[data-theme="dark"] .highlight .code .title,
+html[data-theme="dark"] .highlight .code .function {
+  color: #82aaff !important;
+}
+html[data-theme="dark"] .highlight .code .meta,
+html[data-theme="dark"] .highlight .code .meta-keyword {
+  color: #c792ea !important;
+}
+html[data-theme="dark"] .highlight .code .attr,
+html[data-theme="dark"] .highlight .code .variable,
+html[data-theme="dark"] .highlight .code .params {
+  color: #a6bcdc !important;
+}
+
+/* ============================================
+   洛天文章美化 - 表格样式
+   ============================================ */
+#article-container table th,
+#article-container table thead th {
+  text-align: center !important;
+}
+#article-container table td,
+#article-container table th {
+  color: rgba(255, 255, 255, 0.90) !important;
+}
+#article-container table tr:nth-child(even) {
+  background: rgba(0,0,0,0.02);
+}
+[data-theme="dark"] #article-container table tr:nth-child(even) {
+  background: rgba(255,255,255,0.03);
+}
+
+/* ============================================
+   洛天文章美化 - Mermaid 流程图透明
+   ============================================ */
+#article-container .mermaid,
+#article-container .mermaid svg,
+.mermaid-wrap,
+#article-container .mermaid svg rect.mermaid-bg,
+#article-container .mermaid svg rect:first-child {
+  background: transparent !important;
+  fill: transparent !important;
+}
+
+/* ============================================
+   全站背景图统一方案
+   原理：body 固定背景图，所有横幅区域透明，
+   背景图透过横幅直接显示，实现无缝融合
+   ============================================ */
+
+/* 首页/文章/各页面横幅区域 — 透明，让 body 背景图透出 */
+#page-header,
+#page-header.full_page,
+#page-header:not(.not-top-img) {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* 横幅内的遮罩层也透明（Butterfly 有时会加一层蒙版） */
+#page-header .bg,
+#page-header .page-bg,
+#page-header .post-bg {
+  background: transparent !important;
+  background-image: none !important;
+}
+#page-header .bg::before,
+#page-header .page-bg::before,
+#page-header .post-bg::before {
+  background: transparent !important;
+}
+
+/* 首页大标题区域文字加一层轻微投影，在深色背景上更易读 */
+#site-title,
+#site-subtitle {
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* 导航栏 — 深色背景图下加深毛玻璃遮罩 */
+#nav {
+  background: rgba(10, 10, 25, 0.55) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme=dark] #nav {
+  background: rgba(5, 5, 15, 0.7) !important;
+}
+
+/* 导航栏文字在深色背景上保持白色可见 */
+html:not([data-theme=dark]) #nav a,
+html:not([data-theme=dark]) #nav .site-page,
+html:not([data-theme=dark]) #menus .menus_item > a,
+html:not([data-theme=dark]) #menus .menus_item > span,
+html:not([data-theme=dark]) #nav-right .site-page {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+html:not([data-theme=dark]) #nav a:hover,
+html:not([data-theme=dark]) #menus .menus_item > a:hover {
+  color: #fff !important;
+}
+
+/* 首页滚动下箭头在深色背景上可见 */
+#scroll-down i {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* ============================================
+   洛天文章美化 - 文章底部信息卡片透明
+   ============================================ */
+#body-wrap #recent-posts > .recent-post-item .recent-post-info,
+#body-wrap #recent-posts > .recent-post-item .recent-post-info::before,
+#body-wrap #recent-posts > .recent-post-item .recent-post-info::after,
+#body-wrap #recent-posts > .recent-post-item .recent-post-info > .article-title,
+#body-wrap #recent-posts > .recent-post-item .recent-post-info > .article-meta-wrap,
+#body-wrap #recent-posts > .recent-post-item .recent-post-info > .content {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* ============================================
+   颜色修复 —— 解决文字与背景同色不可见的问题
+   ============================================ */
+
+/* 页脚版权信息 */
+#footer #footer-wrap a {
+  color: rgba(255, 255, 255, 0.85) !important;
+  text-decoration: none;
+}
+#footer #footer-wrap a:hover {
+  opacity: 0.7;
+}
+/* 页脚所有文字 */
+#footer-wrap,
+#footer {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* 侧边栏作者描述 */
+.card-info .author-info-description {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+/* 侧边栏卡片标题（公告、目录、最新文章、归档、网站信息等） */
+.card-widget .card-header,
+.card-widget .card-header span,
+.card-widget .card-header i,
+.item-headline,
+.item-headline span,
+.item-headline i,
+.card-announcement .card-header,
+.card-webinfo .card-header,
+.card-recent-post .card-header,
+.card-categories .card-header,
+.card-tags .card-header,
+.card-archives .card-header,
+.card-toc .card-header,
+aside .card-header,
+aside .card-header *,
+#aside-content .card-header,
+#aside-content .card-header * {
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* 侧边栏所有正文文字 */
+#aside-content,
+#aside-content p,
+#aside-content span,
+#aside-content a,
+#aside-content li,
+#aside-content time,
+#aside-content .card-tag-cloud a,
+#aside-content .card-category-list a,
+#aside-content .card-archives-list a,
+#aside-content .aside-list-item .content .time,
+#aside-content .aside-list-item .content .title,
+#aside-content .card-webinfo .webinfo-item,
+#aside-content .card-webinfo .webinfo-item span,
+#aside-content .site-data .data-item a,
+#aside-content .site-data .data-item .count,
+#aside-content .site-data .data-item .data-item-link,
+.card-toc .toc-item a,
+.card-toc #post-toc a {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* 侧边栏链接悬停 */
+#aside-content a:hover {
+  color: var(--purple_text) !important;
+}
+
+/* 目录当前项高亮 */
+.card-toc .toc-item.active a,
+#post-toc .active a {
+  color: var(--purple_text) !important;
+}
+
+/* 确保网站信息卡的图标颜色 */
+.card-webinfo .webinfo .webinfo-item i {
+  color: var(--purple_text) !important;
+  margin-right: 6px;
+}
+
+/* 侧边栏数据链接 */
+.site-data a {
+  color: var(--purple_text) !important;
+  transition: opacity 0.2s;
+}
+.site-data a:hover {
+  opacity: 0.7;
+}
+
+/* 侧边栏分类和标签文字 */
+.card-category-list-link,
+.card-tag-cloud a {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+.card-category-list-link:hover,
+.card-tag-cloud a:hover {
+  color: var(--purple_text) !important;
+}
+
+/* 侧边栏公告内容 */
+.card-announcement .announcement_content p {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* 侧边栏最近文章标题 */
+.card-recent-post .aside-list-item .content .title {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+.card-recent-post .aside-list-item .content .title:hover {
+  color: var(--purple_text) !important;
+}
+
+/* 侧边栏网站信息 */
+.card-webinfo .webinfo .webinfo-item,
+.card-webinfo .webinfo-item span,
+.webinfo-item {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* 侧边栏作者名、文章数等所有文字 */
+.card-info-avatar + .author-info__name,
+.card-info .author-info__name,
+.card-info .card-info-data .data-item .count,
+.card-info .card-info-data .data-item .data-item-link,
+.card-info .site-data .data-item,
+.card-info .site-data .data-item span,
+.card-info .site-data .data-item a,
+.site-data .data-item .count,
+.site-data .data-item .data-item-link,
+/* 真实 HTML 类名 — 文章/标签/分类 数字和标题 */
+.site-data .headline,
+.site-data .length-num,
+.site-data a,
+.site-data a .headline,
+.site-data a .length-num {
+  color: rgba(255, 255, 255, 0.95) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* GitHub 等社交图标改为白色 */
+#aside-content .card-info .card-info-social a,
+#aside-content .card-info .card-info-social i,
+.card-info .card-info-social .social-icon,
+.card-info .card-info-social a i {
+  color: rgba(255, 255, 255, 0.90) !important;
+}
+.card-info .card-info-social a:hover i {
+  color: #fff !important;
+}
+
+/* About 页面技能标签 */
+.tag-item {
+  background: var(--gradient-start, #6c63ff) !important;
+  color: #ffffff !important;
+  font-weight: 500;
+}
+
+/* 分页器文字 */
+#pagination .page-number {
+  color: rgba(255, 255, 255, 0.88) !important;
+  background: var(--card_bg) !important;
+}
+#pagination .page-number.current {
+  color: #ffffff !important;
+  background: var(--purple_text) !important;
+}
+
+/* 文章元信息（发表于/更新于/字数/阅读时长/浏览量） */
+.article-meta-label,
+.post-meta-date,
+.post-meta-label,
+.article-meta-wrap,
+.article-meta-wrap span,
+.article-meta-wrap a,
+.article-meta-wrap i,
+#post-meta .post-meta-date,
+.post-info-word,
+.post-info-time,
+#busuanzi_value_page_pv,
+.page_pv {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* 文章版权信息块 */
+#post-copyright,
+.post-copyright,
+.post-copyright p,
+.post-copyright a,
+.post-copyright span {
+  color: rgba(255, 255, 255, 0.88) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+.post-copyright a:hover {
+  color: var(--purple_text) !important;
+}
+
+/* 文章内容正文 */
+#article-container p,
+#article-container li,
+#article-container h1,
+#article-container h2,
+#article-container h3,
+#article-container h4,
+#article-container h5,
+#article-container h6,
+.article-content p {
+  color: var(--text_primary) !important;
+  text-shadow: none;
+}
+
+/* 文章内的链接 */
+#article-container a {
+  color: var(--purple_text) !important;
+}
+
+/* 归档页文字 */
+#archive .article-sort-title {
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+#archive .article-sort-item-title {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* about/intro 页面的 highlight-text */
+.highlight-text {
+  color: var(--purple_text) !important;
+  font-weight: 600;
+}
+
+/* 导航栏文字颜色增强 */
+#nav a,
+#nav .site-page,
+#menus .menus_item > a,
+#menus .menus_item > span {
+  color: var(--text_primary) !important;
+}
+#nav a:hover,
+#menus .menus_item > a:hover {
+  color: var(--purple_text) !important;
+}
+
+/* 下拉菜单 — 修复悬停消失太快的问题 */
+#menus .menus_item_child {
+  background: var(--card_bg) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px var(--shadow) !important;
+  /* 关键：延迟隐藏，给鼠标移动留出时间 */
+  transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease !important;
+  transform-origin: top center;
+}
+/* 让父级悬停区域延伸，避免鼠标移动间隙导致菜单消失 */
+#menus .menus_item:hover > .menus_item_child,
+#menus .menus_item_child:hover {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+/* 父菜单和子菜单之间加一块透明填充，消除间隙 */
+#menus .menus_item_child::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+}
+#menus .menus_item_child a {
+  color: var(--text_secondary) !important;
+}
+#menus .menus_item_child a:hover {
+  color: var(--purple_text) !important;
+  background: var(--card_hover) !important;
+}
+
+/* 代码块内文字 */
+.highlight .code {
+  color: var(--text_primary) !important;
+}
+
+/* 修复 canvas_nest 覆盖问题 */
+canvas {
+  pointer-events: none;
+}
+
+/* ============================================
+   鼠标悬停增强特效
+   ============================================ */
+
+/* 文章卡片悬停时亮起紫色边框光晕 */
+#recent-posts .recent-post-item:hover {
+  border-color: rgba(108, 99, 255, 0.4) !important;
+  box-shadow: 0 8px 32px rgba(108, 99, 255, 0.18), 0 2px 8px var(--shadow) !important;
+}
+
+/* 侧边栏卡片悬停光晕 */
+.layout .aside-wrap .card-widget:hover {
+  box-shadow: 0 4px 20px rgba(108, 99, 255, 0.15) !important;
+  transition: box-shadow 0.3s ease;
+}
+
+/* 技能图标悬停时浮起+光晕 */
+.skill-icon:hover {
+  filter: drop-shadow(0 4px 10px rgba(108, 99, 255, 0.5));
+}
+
+/* 导航菜单项悬停时下划线动画 */
+#menus .menus_item > a::after {
+  content: '';
+  display: block;
+  height: 2px;
+  width: 0;
+  background: var(--purple_text);
+  transition: width 0.25s ease;
+  margin: 0 auto;
+}
+#menus .menus_item > a:hover::after {
+  width: 100%;
+}
+
+/* 项目卡片悬停发光 */
+.project-card:hover {
+  border-color: rgba(108, 99, 255, 0.3) !important;
+  box-shadow: 0 12px 32px rgba(108, 99, 255, 0.15) !important;
+}
+
+/* 分页按钮悬停 */
+#pagination .page-number:hover {
+  background: var(--purple_text) !important;
+  color: #fff !important;
+  transform: scale(1.08);
+  transition: all 0.2s;
+}
+
+/* 返回顶部按钮悬停旋转 */
+#go-up:hover {
+  box-shadow: 0 4px 20px rgba(108, 99, 255, 0.3) !important;
+  transform: translateY(-2px);
+  transition: all 0.3s;
+}
+
+/* ============================================
+   文章页顶部信息区 — 渐变标题 + 透明卡片框
+   ============================================ */
+
+/* 文章标题渐变动画，与首页 #site-title 完全一致 */
+#post-info .post-title {
+  background-image: var(--gradient);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradShift 6s ease-in-out infinite;
+  font-weight: 800;
+  text-shadow: none;
+}
+
+/* 标题 + 元信息整块加透明卡片框，宽度与正文 .layout 对齐（left/right 由 JS 动态设置） */
+#post-info {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding-top: 24px;
+  padding-bottom: 20px;
+}
+#post-info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--post-info-left, 15px);
+  right: var(--post-info-right, 15px);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  box-shadow: 0 2px 16px var(--shadow);
+  z-index: 0;
+  pointer-events: none;
+}
+#post-info .post-title,
+#post-info #post-meta {
+  position: relative;
+  z-index: 1;
+  padding-left: 55px !important;
+  padding-right: 55px !important;
+}
+[data-theme=dark] #post-info::before {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* 元信息文字统一白色 */
+#post-meta,
+#post-meta span,
+#post-meta time,
+#post-meta a,
+#post-meta i,
+.meta-firstline,
+.meta-secondline,
+.post-meta-date,
+.post-meta-label,
+.post-meta-separator,
+.post-meta-icon,
+.post-meta-categories a,
+.word-count {
+  color: rgba(255, 255, 255, 0.80) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.80) !important;
+}
+#post-meta a:hover,
+.post-meta-categories a:hover {
+  color: var(--purple_text) !important;
+  -webkit-text-fill-color: var(--purple_text) !important;
+}
+#article-container {
+  text-align: justify;
+}
+
+/* 下拉菜单圆角和阴影（不加 overflow:hidden，否则会裁掉桥接的 ::before） */
+.menus_item .menus_item_child {
+  border-radius: 10px !important;
+  box-shadow: 0 4px 20px var(--shadow) !important;
+}
+
+/* 首页顶部区域 — 占页面的上半部分 */
+#site-info {
+  padding: 16vh 0 2vh;
+}
+
+/* 首页大标题保持醒目 */
+#site-title {
+  font-size: 2.8rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 2px;
+}
+
+/* 首页副标题位置 */
+#site-subtitle {
+  margin-top: 8px;
+}
+
+/* 向下展开箭头 */
+#scroll-down {
+  display: block !important;
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: scrollDownBounce 2s ease-in-out infinite;
+  z-index: 5;
+}
+#scroll-down i {
+  font-size: 28px;
+  color: var(--text_primary);
+  opacity: 0.5;
+}
+
+@keyframes scrollDownBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* 带 banner 的首页只占屏幕的一半高度 */
+#page-header.full_page {
+  height: 50vh !important;
+  min-height: 320px;
+}
+#page-header:not(.not-top-img) {
+  height: 50vh !important;
+  min-height: 320px;
+}
+
+/* 搜索按钮 */
+#search-button a {
+  color: var(--text_primary) !important;
+}
+
+/* 响应式 - 手机端导航 */
+@media (max-width: 768px) {
+  #nav {
+    background: rgba(255, 255, 255, 0.85) !important;
+  }
+  [data-theme=dark] #nav {
+    background: rgba(19, 20, 24, 0.9) !important;
+  }
+}
+
+/* ============================================
+   1. 彩色标签云 — 侧边栏标签渐变配色
+   ============================================ */
+#aside-content .card-tag-cloud a {
+  display: inline-block;
+  padding: 3px 10px;
+  margin: 3px 2px;
+  border-radius: 12px;
+  font-size: 13px !important;
+  background: linear-gradient(135deg, rgba(108,99,255,0.25), rgba(65,209,255,0.20)) !important;
+  border: 1px solid rgba(108,99,255,0.25) !important;
+  color: rgba(255,255,255,0.90) !important;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+#aside-content .card-tag-cloud a:hover {
+  transform: scale(1.08);
+  background: linear-gradient(135deg, rgba(108,99,255,0.5), rgba(65,209,255,0.4)) !important;
+  box-shadow: 0 2px 10px rgba(108,99,255,0.35);
+  color: #fff !important;
+}
+
+/* ============================================
+   2. 侧边栏头像 — 悬停/离开触发一次快速旋转
+   ============================================ */
+@keyframes avatarSpinOnce {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.card-info .avatar-img img {
+  border-radius: 50% !important;
+  display: block;
+  width: 100%;
+  box-shadow: 0 0 0 3px rgba(108,99,255,0.5), 0 0 20px rgba(108,99,255,0.25);
+  transition: box-shadow 0.4s ease;
+  cursor: pointer;
+}
+.card-info .avatar-img img.avatar-spinning {
+  animation: avatarSpinOnce 0.5s cubic-bezier(0.4, 0, 0.2, 1) 1;
+}
+.card-info .avatar-img img:hover {
+  box-shadow: 0 0 0 3px rgba(65,209,255,0.7), 0 0 28px rgba(65,209,255,0.4);
+}
+
+/* ============================================
+   3. 自定义滚动条 — 细条紫色，与主题一致
+   ============================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.04);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(108,99,255,0.6), rgba(65,209,255,0.5));
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(108,99,255,0.9), rgba(65,209,255,0.8));
+}
+
+/* ============================================
+   4. 引用块 blockquote — 渐变左边框 + 轻玻璃
+   ============================================ */
+#article-container blockquote {
+  position: relative;
+  margin: 1.2em 0;
+  padding: 12px 18px 12px 22px;
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(6px);
+  border-left: none !important;
+  border-radius: 0 10px 10px 0;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  color: rgba(255,255,255,0.85) !important;
+}
+#article-container blockquote::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  border-radius: 4px 0 0 4px;
+  background: linear-gradient(180deg, #6c63ff, #41d1ff);
+}
+#article-container blockquote p {
+  margin: 0;
+  color: rgba(255,255,255,0.85) !important;
+}
+
+/* ============================================
+   5. 首页文章卡片入场动画 — fade-up
+   ============================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+#recent-posts .recent-post-item {
+  animation: fadeUp 0.5s ease both;
+}
+#recent-posts .recent-post-item:nth-child(1) { animation-delay: 0.05s; }
+#recent-posts .recent-post-item:nth-child(2) { animation-delay: 0.12s; }
+#recent-posts .recent-post-item:nth-child(3) { animation-delay: 0.19s; }
+#recent-posts .recent-post-item:nth-child(4) { animation-delay: 0.26s; }
+#recent-posts .recent-post-item:nth-child(5) { animation-delay: 0.33s; }
+#recent-posts .recent-post-item:nth-child(6) { animation-delay: 0.40s; }
+
+/* ============================================
+   6. TOC 目录 — 彩色进度线 + 当前项发光
+   ============================================ */
+.card-toc .toc-content {
+  border-left: 2px solid rgba(108,99,255,0.20);
+  padding-left: 4px;
+}
+.card-toc .toc-item {
+  position: relative;
+  padding-left: 10px;
+}
+.card-toc .toc-item a {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.70) !important;
+  transition: color 0.2s, padding-left 0.2s;
+}
+.card-toc .toc-item a:hover {
+  color: rgba(255,255,255,0.95) !important;
+  padding-left: 4px;
+}
+.card-toc .toc-item.active > a,
+#post-toc .active > a {
+  color: #fff !important;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(108,99,255,0.6);
+}
+.card-toc .toc-item.active::before,
+#post-toc .active::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 0; bottom: 0;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #6c63ff, #41d1ff);
+}
+
+/* ============================================
+   Live2D 右下角唤起按钮
+   ============================================ */
+#waifu-wake-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--card_bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: var(--card_border);
+  box-shadow: 0 2px 12px var(--shadow);
+  cursor: pointer;
+  font-size: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 8px;
+  order: -1;
+}
+#waifu-wake-btn.visible {
+  display: flex;
+}
+#waifu-wake-btn:hover {
+  transform: scale(1.12);
+  box-shadow: 0 4px 20px rgba(108, 99, 255, 0.3);
+}
+
+/* ============================================
+   Twikoo 评论区文字白色
+   ============================================ */
+/* 标题、标签、输入框、按钮 */
+.tk-comments-title,
+.tk-comments-title *,
+.tk-row label,
+.tk-nick input, .tk-mail input, .tk-link input,
+.tk-content textarea,
+.tk-action-btn,
+.tk-preview-btn,
+.tk-submit,
+/* 评论列表：昵称、时间、正文、回复 */
+.tk-comment .tk-nick,
+.tk-comment .tk-time,
+.tk-comment .tk-content,
+.tk-comment .tk-content p,
+.tk-comment .tk-content *,
+.tk-comment .tk-actions a,
+.tk-comment .tk-tag,
+.tk-replies .tk-comment .tk-nick,
+.tk-replies .tk-comment .tk-content,
+.tk-replies .tk-comment .tk-content p,
+/* 计数、加载更多 */
+.tk-count,
+.tk-expand,
+.tk-footer,
+.tk-footer a {
+  color: rgba(255, 255, 255, 0.90) !important;
+}
+/* placeholder */
+.tk-nick input::placeholder,
+.tk-mail input::placeholder,
+.tk-link input::placeholder,
+.tk-content textarea::placeholder {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+/* 输入框边框在深色背景上可见 */
+.tk-nick input, .tk-mail input, .tk-link input,
+.tk-content textarea {
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+.tk-nick input:focus, .tk-mail input:focus, .tk-link input:focus,
+.tk-content textarea:focus {
+  border-color: rgba(108, 99, 255, 0.6) !important;
+  outline: none !important;
+}

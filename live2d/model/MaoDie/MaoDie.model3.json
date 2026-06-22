@@ -1,0 +1,19 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "MaoDie.moc3",
+		"Textures": [
+			"MaoDie.1024/texture_00.png"
+		],
+		"DisplayInfo": "MaoDie.cdi3.json",
+		"Expressions": [
+			{ "Name": "heart_eyes", "File": "expressions/heart_eyes.exp3.json" },
+			{ "Name": "blush",      "File": "expressions/blush.exp3.json" },
+			{ "Name": "flower",     "File": "expressions/flower.exp3.json" },
+			{ "Name": "sweat",      "File": "expressions/sweat.exp3.json" },
+			{ "Name": "question",   "File": "expressions/question.exp3.json" },
+			{ "Name": "helmet",     "File": "expressions/helmet.exp3.json" },
+			{ "Name": "tube",       "File": "expressions/tube.exp3.json" }
+		]
+	}
+}
