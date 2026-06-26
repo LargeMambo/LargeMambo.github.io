@@ -85,6 +85,35 @@
     
     
     <entry>
+      <title>解决 Claude Code 报错 Error: InputValidationError — Write 工具参数丢失问题</title>
+      <link href="/2026/03/17/claude-code-write-bug-fix/"/>
+      <url>/2026/03/17/claude-code-write-bug-fix/</url>
+      
+        <content type="html"><![CDATA[<h2 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h2><p>今天用 Claude Code 做头脑风暴，把设计文档的需求、架构、细节全部询问确认完毕后，让它一次性写入完整的 <code>.md</code> 文件。结果 Write 工具反复报错：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">⏺ 让我编写完整的设计文档。</span><br><span class="line">  ⎿  Error writing file</span><br><span class="line"></span><br><span class="line">⏺ 让我编写完整的设计文档。</span><br><span class="line">  ⎿  Error writing file</span><br><span class="line"></span><br><span class="line">⏺ 让我编写设计文档。</span><br><span class="line">  ⎿  Error writing file</span><br><span class="line"></span><br><span class="line">⏺ 让我编写完整的设计文档。</span><br><span class="line">  ⎿  Error writing file</span><br><span class="line"></span><br><span class="line">⏺ 让我编写设计文档。</span><br><span class="line">  ⎿  Error writing file</span><br><span class="line"></span><br><span class="line">  ⎿  Error: InputValidationError: Write failed due to the following issues:</span><br><span class="line">     The required parameter `file_path` is missing</span><br><span class="line">     The required parameter `content` is missing</span><br><span class="line"></span><br><span class="line">Error: InputValidationError: Write failed due to the following issue: The required parameter content is missing</span><br></pre></td></tr></table></figure><h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>这是 Claude Code 的已知 bug。在同一个会话内消耗了大量 token（长时间头脑风暴、反复确认需求）之后，Write 工具的参数传递会失效——明明在 prompt 里指定了文件路径和内容，工具调用时却丢失了 <code>file_path</code> 或 <code>content</code> 参数。</p><p>这个问题的 GitHub issue 从 2025 年起就存在了，至今仍未彻底修复。本质上属于长上下文场景下的工具调用稳定性问题。</p><p>并非每次都会触发，<strong>只有在单次会话 token 用量很大时才会复现</strong>。</p><h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p><strong>分段写入 + 指定行数约束</strong>，不要让它一次性写入完整文档。让 Claude Code 每次只写入 100～200 行，同时打开 Edit 工具的自动接收模式。</p><p>操作步骤：</p><ol><li><strong>打断当前报错循环</strong>，重新发起写入指令</li><li><strong>指定分段范围</strong>，例如：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">把上面的设计文档写入 file.md，每次只写 100 行</span><br></pre></td></tr></table></figure></li><li><strong>启用自动接收</strong>（Edit 工具的消息确认选择 auto-accept）</li><li><strong>重复直到写完</strong>，每次 prompt 跟上一次结束的位置</li></ol><h3 id="为什么分段写入有效"><a href="#为什么分段写入有效" class="headerlink" title="为什么分段写入有效"></a>为什么分段写入有效</h3><p>分段写入将单次工具调用的负载控制在模型可稳定处理的范围内。100～200 行的输出量远低于一次性输出上千行，工具调用的参数完整性得到保证。虽然需要多交互几次，但在 bug 未被官方修复前是最可靠的 workaround。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table><thead><tr><th>项目</th><th>内容</th></tr></thead><tbody><tr><td>根本原因</td><td>长上下文场景下 Claude Code Write 工具参数丢失</td></tr><tr><td>已知状态</td><td>GitHub Issue 自 2025 年起未彻底修复</td></tr><tr><td>临时方案</td><td>分段写入，每次 100～200 行 + auto-accept</td></tr><tr><td>推荐操作</td><td>涉及长篇文档时提前分段，避免一次性写入</td></tr></tbody></table><p>如果你也踩到了同样的坑，分段写入是目前最稳的绕行方案。</p><hr><blockquote><p><strong>关联资源：</strong></p><ol><li>Claude Code 官方 Issue 跟踪（GitHub 搜索 “Claude Code Write failed InputValidationError”）</li><li><a href="/2023/03/15/hexo-live2d-deploy/">我的 Live2D 部署笔记</a> — 同博客另一篇技术记录</li></ol></blockquote>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Claude Code </tag>
+            
+            <tag> AI </tag>
+            
+            <tag> Bug </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>AI给我的大学生活带来的撕裂感</title>
       <link href="/2026/03/03/casual-literary-notes-1/"/>
       <url>/2026/03/03/casual-literary-notes-1/</url>
