@@ -7,4 +7,3 @@ Disallow: /css/
 Disallow: /fonts/
 
 Sitemap: https://LargeMambo.github.io/sitemap.xml
-Sitemap: https://LargeMambo.github.io/baidusitemap.xml
